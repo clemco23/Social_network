@@ -113,6 +113,56 @@ class UserController extends Controller
             return response()->json(['message' => 'Error deleting user: ' . $e->getMessage()], 500);
         }
     }
+
+    public function login(Request $request)
+{
+    try {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !\Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        // Supprimer les anciens tokens (optionnel)
+        $user->tokens()->delete();
+
+        // Créer un nouveau token
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => $user,
+            'token' => $token
+        ], 200);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json(['message' => 'Validation error', 'errors' => $e->errors()], 422);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Error during login: ' . $e->getMessage()], 500);
+    }
+}
+
+public function me(Request $request)
+{
+    return response()->json($request->user(), 200);
+ 
+}
+
+public function logout(Request $request)
+{
+    // Supprimer tous les tokens de l'utilisateur authentifié
+    $request->user()->tokens()->delete();
+
+    return response()->json([
+        'message' => 'Logged out successfully'
+    ], 200);
+}
+
+
    
 }
  
