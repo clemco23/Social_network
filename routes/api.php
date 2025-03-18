@@ -14,14 +14,19 @@ use App\Http\Controllers\UserController;
 |
 */
 
-route::get('/users', [UserController::class, 'index']);
-route::post('/users/register', [UserController::class, 'register']);
-route::patch('/users/{id}', [UserController::class, 'update']);
-route::post('/users/login', [UserController::class, 'login']);
 
-Route::middleware('auth:sanctum')->get('/me', [UserController::class, 'me']);
-Route::middleware('auth:sanctum')->post('/users/logout', [UserController::class, 'logout']);
+route::post('/users/register', [UserController::class, 'register'])->name('api.register');
+route::post('/users/login', [UserController::class, 'login'])->name('api.login');
 
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    route::get('/users', [UserController::class, 'index']);
+    route::patch('/users/{id}', [UserController::class, 'update']);
+    route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::get('/users/me', [UserController::class, 'me']);
+    Route::post('/users/logout', [UserController::class, 'logout']);
+});
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
