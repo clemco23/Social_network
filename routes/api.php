@@ -17,6 +17,9 @@ use App\Http\Controllers\UserController;
 
 route::post('/users/register', [UserController::class, 'register'])->name('api.register');
 route::post('/users/login', [UserController::class, 'login'])->name('api.login');
+Route::post('/users/upload-image', [UserController::class, 'uploadImage'])->middleware('auth:sanctum');
+
+
 
 
 

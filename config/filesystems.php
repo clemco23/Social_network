@@ -53,6 +53,13 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
+        'images' => [
+            'driver' => 'local',
+            'root' => public_path('uploads/images'), // Dossier où les images seront stockées
+            'url' => env('APP_URL') . '/uploads/images',
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*
