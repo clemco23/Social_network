@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
  
 class UserController extends Controller
 {
@@ -201,6 +202,34 @@ class UserController extends Controller
         }
         return view('auth.profile', compact('user'));
     }
+
+    public function uploadImage(Request $request)
+    {
+        // Valider l'image
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        // Vérifier si l'image est présente
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            
+            // Créer un nom unique pour l'image
+            $imageName = time() . '_' . $image->getClientOriginalName();
+    
+            // Sauvegarder l'image dans le dossier 'profile_pictures' dans le dossier 'public/storage'
+            $imagePath = $image->storeAs('profile_pictures', $imageName, 'public');
+    
+            // Mettre à jour le profil de l'utilisateur avec le chemin relatif de l'image
+            auth()->user()->update(['profile_picture' => $imagePath]);
+    
+            // Répondre avec succès
+            return back()->with('success', 'Image uploaded successfully!');
+        }
+    
+        return back()->with('error', 'No image uploaded');
+    }
+    
    
 }
  
