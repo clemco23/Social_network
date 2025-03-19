@@ -25,7 +25,8 @@ Route::post('/users/upload-image', [UserController::class, 'uploadImage'])->midd
 
 Route::middleware('auth:sanctum')->group(function () {
     route::get('/users', [UserController::class, 'index']);
-    route::patch('/users/{id}', [UserController::class, 'update']);
+    route::patch('/users/{id}', [UserController::class, 'update'])->name('update');
+    route::post('/profile/update/', [UserController::class, 'update'])->name('update.submit');
     route::delete('/users/{id}', [UserController::class, 'destroy']);
     Route::get('/users/me', [UserController::class, 'me']);
     Route::post('/users/logout', [UserController::class, 'logout']);

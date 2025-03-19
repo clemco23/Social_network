@@ -1,10 +1,11 @@
-<form method="Post" action="{{ route('api.register') }}">
+<form method="POST" action="{{ route('register.submit') }}" enctype="multipart/form-data">
     @csrf
-    <input type="text" name="username" placeholder="username">
+    <input type="text" name="username" placeholder="Username">
     <input type="email" name="email" placeholder="Email">
     <input type="password" name="password" placeholder="Password">
-    <input type="textarea" name="bio" placeholder="Bio">
+    <textarea name="bio" id="bio"></textarea>
+    <input type="file" name="profile_picture" accept="image/*">
+
     <button type="submit">Register</button>
- 
-</form>  
+</form> 
 
