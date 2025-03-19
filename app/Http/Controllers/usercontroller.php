@@ -224,7 +224,7 @@ class UserController extends Controller
     }
 
     public function uploadImage(Request $request)
-{
+    {
     // Valider l'image
     $request->validate([
         'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -248,7 +248,7 @@ class UserController extends Controller
     }
 
     return back()->with('error', 'No image uploaded');
-}
+    }
 
 
     
